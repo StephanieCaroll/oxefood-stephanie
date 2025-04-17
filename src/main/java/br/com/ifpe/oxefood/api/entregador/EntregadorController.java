@@ -1,4 +1,4 @@
-package br.com.ifpe.oxefood.api.cliente;
+package br.com.ifpe.oxefood.api.entregador;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,22 +9,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.ifpe.oxefood.modelo.cliente.Cliente;
-import br.com.ifpe.oxefood.modelo.cliente.ClienteService;
+import br.com.ifpe.oxefood.modelo.entregador.Entregador;
+import br.com.ifpe.oxefood.modelo.entregador.EntregadorService;
 
 @RestController //Faz a classe ser um controller
-@RequestMapping("/api/cliente")
+@RequestMapping("/api/entregador")
 @CrossOrigin //Utilizada para o controller receber requisições do React
-
-public class ClienteController {
+public class EntregadorController {
       @Autowired //Instanciar no cliente service
-   private ClienteService clienteService;
+   private EntregadorService entregadorService;
 
    @PostMapping //Especificar que essa função vai receber requisições do tipo Post
-   public ResponseEntity<Cliente> save(@RequestBody ClienteRequest request) {
+   public ResponseEntity<Entregador> save(@RequestBody EntregadorRequest request) {
 
-       Cliente cliente = clienteService.save(request.build());
-       return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
+       Entregador entregador = entregadorService.save(request.build());
+       return new ResponseEntity<Entregador>(entregador, HttpStatus.CREATED);
    }
-
 }

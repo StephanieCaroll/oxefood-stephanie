@@ -1,4 +1,4 @@
-package br.com.ifpe.oxefood.until.entity;
+package br.com.ifpe.oxefood.util.entity;
 
 import java.io.Serializable;
 
