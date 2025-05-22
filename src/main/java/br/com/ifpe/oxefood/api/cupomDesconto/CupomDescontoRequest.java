@@ -1,10 +1,10 @@
-package br.com.ifpe.oxefood.api.cupomDesconto;
+package br.com.ifpe.oxefood.api.cupomdesconto;
 
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import br.com.ifpe.oxefood.modelo.cupomDesconto.CupomDesconto;
+import br.com.ifpe.oxefood.modelo.cupomdesconto.CupomDesconto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

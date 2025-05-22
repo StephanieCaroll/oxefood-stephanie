@@ -1,4 +1,4 @@
-package br.com.ifpe.oxefood.modelo.cupomDesconto;
+package br.com.ifpe.oxefood.modelo.cupomdesconto;
 
 import java.time.LocalDate;
 
