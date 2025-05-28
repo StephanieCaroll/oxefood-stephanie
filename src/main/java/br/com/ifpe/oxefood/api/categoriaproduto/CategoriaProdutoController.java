@@ -14,21 +14,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.ifpe.oxefood.modelo.categoriaproduto.CategoriaProduto;
 import br.com.ifpe.oxefood.modelo.categoriaproduto.CategoriaProdutoService;
- 
 
 public class CategoriaProdutoController {
-    
- @Autowired //Instanciar no cliente service
-   private CategoriaProdutoService categoriaProdutoService;
 
-   @PostMapping //Especificar que essa função vai receber requisições do tipo Post
-   public ResponseEntity<CategoriaProduto> save(@RequestBody CategoriaProdutoRequest request) {
+    @Autowired // Instanciar no cliente service
+    private CategoriaProdutoService categoriaProdutoService;
 
-       CategoriaProduto categoriaProduto = categoriaProdutoService.save(request.build());
-       return new ResponseEntity<CategoriaProduto>(categoriaProduto, HttpStatus.CREATED);
-   }
+    @PostMapping // Especificar que essa função vai receber requisições do tipo Post
+    public ResponseEntity<CategoriaProduto> save(@RequestBody CategoriaProdutoRequest request) {
 
-   @GetMapping
+        CategoriaProduto categoriaProduto = categoriaProdutoService.save(request.build());
+        return new ResponseEntity<CategoriaProduto>(categoriaProduto, HttpStatus.CREATED);
+    }
+
+    @GetMapping
     public List<CategoriaProduto> listarTodos() {
         return categoriaProdutoService.listarTodos();
     }
@@ -38,18 +37,19 @@ public class CategoriaProdutoController {
         return categoriaProdutoService.obterPorID(id);
     }
 
-    @PutMapping("/{id}") 
-    public ResponseEntity<CategoriaProduto> update(@PathVariable("id") Long id, @RequestBody CategoriaProdutoRequest request) { //Recebe o id e os dados do cliente
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoriaProduto> update(@PathVariable("id") Long id,
+            @RequestBody CategoriaProdutoRequest request) { // Recebe o id e os dados do cliente
 
-       categoriaProdutoService.update(id, request.build()); //Objeto preenchido sera enviado para o service
-       return ResponseEntity.ok().build();
- }
+        categoriaProdutoService.update(id, request.build()); // Objeto preenchido sera enviado para o service
+        return ResponseEntity.ok().build();
+    }
 
-   @DeleteMapping("/{id}") // passar o id do cliente que eu quero remover
-   public ResponseEntity<Void> delete(@PathVariable Long id) { //repassar o id para a função delete
+    @DeleteMapping("/{id}") // passar o id do cliente que eu quero remover
+    public ResponseEntity<Void> delete(@PathVariable Long id) { // repassar o id para a função delete
 
-       categoriaProdutoService.delete(id);
-       return ResponseEntity.ok().build();
-   }
+        categoriaProdutoService.delete(id);
+        return ResponseEntity.ok().build();
+    }
 
 }
