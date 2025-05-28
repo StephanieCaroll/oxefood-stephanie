@@ -1,4 +1,4 @@
-package br.com.ifpe.oxefood.api.cupomdesconto;
+package br.com.ifpe.oxefood.api.cupomDesconto;
 
 import java.util.List;
 
