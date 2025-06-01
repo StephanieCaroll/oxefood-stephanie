@@ -24,6 +24,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EnderecoCliente extends EntidadeAuditavel {
+    
     @JsonIgnore //Se não colocar ele iria ficar carregando 
     @ManyToOne
     private Cliente cliente;
