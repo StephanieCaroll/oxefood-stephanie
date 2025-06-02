@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.oxefood.modelo.entregador.Entregador;
 import br.com.ifpe.oxefood.modelo.entregador.EntregadorService;
+import jakarta.validation.Valid;
 
 @RestController //Faz a classe ser um controller
 @RequestMapping("/api/entregador")
@@ -26,7 +27,7 @@ public class EntregadorController {
    private EntregadorService entregadorService;
 
    @PostMapping //Especificar que essa função vai receber requisições do tipo Post
-   public ResponseEntity<Entregador> save(@RequestBody EntregadorRequest request) {
+   public ResponseEntity<Entregador> save(@RequestBody @Valid EntregadorRequest request) {
 
        Entregador entregador = entregadorService.save(request.build());
        return new ResponseEntity<Entregador>(entregador, HttpStatus.CREATED);
