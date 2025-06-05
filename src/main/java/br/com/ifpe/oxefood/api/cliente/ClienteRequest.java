@@ -11,6 +11,7 @@ import br.com.ifpe.oxefood.modelo.cliente.Cliente;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +31,8 @@ public class ClienteRequest {
     private String nome;
 
     @JsonFormat(pattern = "dd/MM/yyyy") //Ele vai esperar a anotação em Dia/Mês/Ano
+    @NotNull(message = "A data de nascimento é obrigatória.")
+    @Past(message = "A data de nascimento não pode ser futura.")
     private LocalDate dataNascimento;
 
     @NotBlank(message = "O CPF é de preenchimento obrigatório")

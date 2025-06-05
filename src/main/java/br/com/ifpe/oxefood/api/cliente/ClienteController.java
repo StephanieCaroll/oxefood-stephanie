@@ -39,6 +39,18 @@ public class ClienteController {
     public List<Cliente> listarTodos() {
         return clienteService.listarTodos();
     }
+    
+@GetMapping("/{clienteId}/endereco")
+public ResponseEntity<List<EnderecoCliente>> listarEnderecosDoCliente(@PathVariable Long clienteId) {
+    Cliente cliente = clienteService.obterPorID(clienteId);
+    
+    if (cliente == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna erro 404 se o cliente não for encontrado
+    }
+    
+    return ResponseEntity.ok(cliente.getEnderecos()); // Retorna os endereços do cliente
+}
+
 
     @GetMapping("/{id}")
     public Cliente obterPorID(@PathVariable Long id) {
@@ -80,5 +92,6 @@ public class ClienteController {
        return ResponseEntity.noContent().build();
    }
 
+   
 
 }

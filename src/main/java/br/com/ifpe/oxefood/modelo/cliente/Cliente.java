@@ -18,8 +18,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty; // Embora @NotBlank seja geralmente preferível para Strings
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent; // Importar para @PastOrPresent
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern; // Importar para @PastOrPresent
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,8 +46,8 @@ public class Cliente extends EntidadeAuditavel {
     private String nome;
 
     @Column(nullable = false) // O campo dataNascimento não poderá ser nulo no DB
-    @NotNull(message = "A Data de Nascimento é de preenchimento obrigatório")
-    @PastOrPresent(message = "A Data de Nascimento não pode ser futura")
+    @NotNull(message = "A data de nascimento é obrigatória.")
+    @Past(message = "A data de nascimento não pode ser futura.")
     @JsonFormat(pattern = "dd/MM/yyyy") // Esta anotação é mais para serialização/desserialização, mas pode ser mantida
     private LocalDate dataNascimento;
 
