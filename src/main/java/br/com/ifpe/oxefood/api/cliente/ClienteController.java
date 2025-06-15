@@ -1,6 +1,7 @@
 package br.com.ifpe.oxefood.api.cliente;
 
 import java.util.List;
+import java.util.Optional; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,38 +19,53 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.ifpe.oxefood.modelo.cliente.Cliente;
 import br.com.ifpe.oxefood.modelo.cliente.ClienteService;
 import br.com.ifpe.oxefood.modelo.cliente.EnderecoCliente;
+import br.com.ifpe.oxefood.modelo.cliente.EnderecoClienteRepository; 
 import jakarta.validation.Valid;
 
 @RestController //Faz a classe ser um controller
 @RequestMapping("/api/cliente")
 @CrossOrigin //Utilizada para o controller receber requisições do React
-
 public class ClienteController {
-      @Autowired //Instanciar no cliente service
-   private ClienteService clienteService;
 
-   @PostMapping //Especificar que essa função vai receber requisições do tipo Post
-   public ResponseEntity<Cliente> save(@RequestBody @Valid ClienteRequest request) {
+    @Autowired //Instanciar no cliente service
+    private ClienteService clienteService;
 
-       Cliente cliente = clienteService.save(request.build());
-       return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
-   }
+    @Autowired // Adicione a injeção do EnderecoClienteRepository
+    private EnderecoClienteRepository enderecoClienteRepository;
 
-   @GetMapping
+    @PostMapping //Especificar que essa função vai receber requisições do tipo Post
+    public ResponseEntity<Cliente> save(@RequestBody @Valid ClienteRequest request) {
+        Cliente cliente = clienteService.save(request.build());
+        return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
+    }
+
+    @GetMapping
     public List<Cliente> listarTodos() {
         return clienteService.listarTodos();
     }
-    
-@GetMapping("/{clienteId}/endereco")
-public ResponseEntity<List<EnderecoCliente>> listarEnderecosDoCliente(@PathVariable Long clienteId) {
-    Cliente cliente = clienteService.obterPorID(clienteId);
-    
-    if (cliente == null) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna erro 404 se o cliente não for encontrado
+
+    @GetMapping("/{clienteId}/endereco")
+    public ResponseEntity<List<EnderecoCliente>> listarEnderecosDoCliente(@PathVariable Long clienteId) {
+        Cliente cliente = clienteService.obterPorID(clienteId);
+
+        if (cliente == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna erro 404 se o cliente não for encontrado
+        }
+        // Filtra apenas endereços habilitados, se aplicável, ou retorne todos
+        // Exemplo: cliente.getEnderecos().stream().filter(EnderecoCliente::getHabilitado).collect(Collectors.toList());
+        return ResponseEntity.ok(cliente.getEnderecos()); // Retorna os endereços do cliente
     }
-    
-    return ResponseEntity.ok(cliente.getEnderecos()); // Retorna os endereços do cliente
-}
+
+    // NOVO ENDPOINT: Busca um endereço específico pelo ID do endereço
+    @GetMapping("/endereco/{id}")
+    public ResponseEntity<EnderecoCliente> obterEnderecoPorID(@PathVariable Long id) {
+        Optional<EnderecoCliente> enderecoOptional = enderecoClienteRepository.findById(id);
+        if (enderecoOptional.isPresent()) {
+            return new ResponseEntity<>(enderecoOptional.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 
     @GetMapping("/{id}")
@@ -57,41 +73,33 @@ public ResponseEntity<List<EnderecoCliente>> listarEnderecosDoCliente(@PathVaria
         return clienteService.obterPorID(id);
     }
 
-    @PutMapping("/{id}") 
+    @PutMapping("/{id}")
     public ResponseEntity<Cliente> update(@PathVariable("id") Long id, @RequestBody ClienteRequest request) { //Recebe o id e os dados do cliente
+        clienteService.update(id, request.build()); //Objeto preenchido sera enviado para o service
+        return ResponseEntity.ok().build();
+    }
 
-       clienteService.update(id, request.build()); //Objeto preenchido sera enviado para o service
-       return ResponseEntity.ok().build();
- }
+    @DeleteMapping("/{id}") // passar o id do cliente que eu quero remover
+    public ResponseEntity<Void> delete(@PathVariable Long id) { //repassar o id para a função delete
+        clienteService.delete(id);
+        return ResponseEntity.ok().build();
+    }
 
-   @DeleteMapping("/{id}") // passar o id do cliente que eu quero remover
-   public ResponseEntity<Void> delete(@PathVariable Long id) { //repassar o id para a função delete
+    @PostMapping("/endereco/{clienteId}")
+    public ResponseEntity<EnderecoCliente> adicionarEnderecoCliente(@PathVariable("clienteId") Long clienteId, @RequestBody @Valid EnderecoClienteRequest request) {
+        EnderecoCliente endereco = clienteService.adicionarEnderecoCliente(clienteId, request.build());
+        return new ResponseEntity<EnderecoCliente>(endereco, HttpStatus.CREATED);
+    }
 
-       clienteService.delete(id);
-       return ResponseEntity.ok().build();
-   }
+    @PutMapping("/endereco/{enderecoId}")
+    public ResponseEntity<EnderecoCliente> atualizarEnderecoCliente(@PathVariable("enderecoId") Long enderecoId, @RequestBody EnderecoClienteRequest request) {
+        EnderecoCliente endereco = clienteService.atualizarEnderecoCliente(enderecoId, request.build());
+        return new ResponseEntity<EnderecoCliente>(endereco, HttpStatus.OK);
+    }
 
-   @PostMapping("/endereco/{clienteId}")
-   public ResponseEntity<EnderecoCliente> adicionarEnderecoCliente(@PathVariable("clienteId") Long clienteId, @RequestBody @Valid EnderecoClienteRequest request) {
-
-       EnderecoCliente endereco = clienteService.adicionarEnderecoCliente(clienteId, request.build());
-       return new ResponseEntity<EnderecoCliente>(endereco, HttpStatus.CREATED);
-   }
-
-   @PutMapping("/endereco/{enderecoId}")
-   public ResponseEntity<EnderecoCliente> atualizarEnderecoCliente(@PathVariable("enderecoId") Long enderecoId, @RequestBody EnderecoClienteRequest request) {
-
-       EnderecoCliente endereco = clienteService.atualizarEnderecoCliente(enderecoId, request.build());
-       return new ResponseEntity<EnderecoCliente>(endereco, HttpStatus.OK);
-   }
-  
-   @DeleteMapping("/endereco/{enderecoId}")
-   public ResponseEntity<Void> removerEnderecoCliente(@PathVariable("enderecoId") Long enderecoId) {
-
-       clienteService.removerEnderecoCliente(enderecoId);
-       return ResponseEntity.noContent().build();
-   }
-
-   
-
+    @DeleteMapping("/endereco/{enderecoId}")
+    public ResponseEntity<Void> removerEnderecoCliente(@PathVariable("enderecoId") Long enderecoId) {
+        clienteService.removerEnderecoCliente(enderecoId);
+        return ResponseEntity.noContent().build();
+    }
 }
