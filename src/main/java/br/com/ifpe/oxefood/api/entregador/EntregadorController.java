@@ -23,7 +23,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/entregador")
 @CrossOrigin //Utilizada para o controller receber requisições do React
 public class EntregadorController {
-      @Autowired //Instanciar no cliente service
+    
+    @Autowired //Instanciar no cliente service
    private EntregadorService entregadorService;
 
    @PostMapping //Especificar que essa função vai receber requisições do tipo Post

@@ -103,7 +103,6 @@ public class Entregador extends EntidadeAuditavel {
     @Column
     private String enderecoUf;
 
-    @NotNull(message = "O status 'ativo' é obrigatório.")
     @Column
     private Boolean ativo;
 }

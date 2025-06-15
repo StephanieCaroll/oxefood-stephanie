@@ -84,6 +84,8 @@ public class EntregadorRequest {
     @Size(min = 2, max = 2, message = "A UF do endereço deve ter 2 caracteres.")
     private String enderecoUf;
 
+    private Boolean ativo;
+    
     public Entregador build() {
         return Entregador.builder()
                 .nome(nome)
@@ -101,6 +103,7 @@ public class EntregadorRequest {
                 .enderecoCidade(enderecoCidade)
                 .enderecoCep(enderecoCep)
                 .enderecoUf(enderecoUf)
+                .ativo(ativo)
                 .build();
     }
 }

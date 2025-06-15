@@ -50,6 +50,7 @@ public class EntregadorService {
        entregador.setEnderecoCidade(entregadorAlterado.getEnderecoCidade());
        entregador.setEnderecoCep(entregadorAlterado.getEnderecoCep());
        entregador.setEnderecoUf(entregadorAlterado.getEnderecoUf());
+       entregador.setAtivo(entregadorAlterado.getAtivo());
          
        repository.save(entregador);
    } 
