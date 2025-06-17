@@ -12,7 +12,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,11 +38,10 @@ public class ClienteRequest {
     @CPF
     private String cpf;
 
-    @Length(min = 8, max = 20, message = "O campo Fone tem que ter entre 8 e 20 caracteres")
     private String foneCelular;
 
     @NotBlank(message = "O Telefone Celular é de preenchimento obrigatório")
-    @Pattern(regexp = "^81\\d{9}$", message = "O Telefone Celular deve começar com '81' e ter 11 dígitos (ex: 81987654321).")
+
     private String foneFixo;
 
     public Cliente build() {

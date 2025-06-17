@@ -56,14 +56,11 @@ public class Cliente extends EntidadeAuditavel {
     @CPF(message = "CPF inválido")
     private String cpf;
 
-    @Column(nullable = false, length = 11) // Adicionei nullable=false e length=11 para consistência com o pattern
-    @NotBlank(message = "O Telefone Celular é de preenchimento obrigatório")
-    @Pattern(regexp = "^81\\d{9}$", message = "O Telefone Celular deve começar com '81' e ter 11 dígitos (ex: 81987654321).")
-    @Length(min = 11, max = 11, message = "O campo Telefone Celular deve ter exatamente {min} caracteres (DDD + 9 dígitos).")
+    @Column
+   
     private String foneCelular;
 
-    @Column(length = 20) // Mantido o length. Não é nullable=false, então pode ser nulo.
-    @Length(max = 20, message = "O campo Fone Fixo deve ter no máximo {max} caracteres.") // Replicado do Request
+    @Column
     private String foneFixo;
 
 }
