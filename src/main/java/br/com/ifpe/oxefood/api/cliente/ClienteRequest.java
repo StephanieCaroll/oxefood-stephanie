@@ -1,17 +1,17 @@
 package br.com.ifpe.oxefood.api.cliente;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.br.CPF;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.ifpe.oxefood.modelo.acesso.Perfil;
+import br.com.ifpe.oxefood.modelo.acesso.Usuario;
 import br.com.ifpe.oxefood.modelo.cliente.Cliente;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,15 +23,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ClienteRequest {
 
-    @NotNull(message = "O Nome é de preenchimento obrigatório") // NotNull Válida se o campo está nulo.
-    @NotEmpty(message = "O Nome é de preenchimento obrigatório") // NotEmpty Válida se o campo está vazio.
-    @Length(max = 100, message = "O Nome deverá ter no máximo {max} caracteres")
+    @NotBlank(message = "O e-mail é de preenchimento obrigatório")
+    @Email
+    private String email;
+
+    @NotBlank(message = "A senha é de preenchimento obrigatório")
+    private String password;
 
     private String nome;
 
-    @JsonFormat(pattern = "dd/MM/yyyy") //Ele vai esperar a anotação em Dia/Mês/Ano
-    @NotNull(message = "A data de nascimento é obrigatória.")
-    @Past(message = "A data de nascimento não pode ser futura.")
+    @JsonFormat(pattern = "dd/MM/yyyy") // Ele vai esperar a anotação em Dia/Mês/Ano
     private LocalDate dataNascimento;
 
     @NotBlank(message = "O CPF é de preenchimento obrigatório")
@@ -40,13 +41,20 @@ public class ClienteRequest {
 
     private String foneCelular;
 
-    @NotBlank(message = "O Telefone Celular é de preenchimento obrigatório")
-
     private String foneFixo;
+
+    public Usuario buildUsuario() {
+        return Usuario.builder()
+                .username(email)
+                .password(password)
+                .roles(Arrays.asList(new Perfil(Perfil.ROLE_CLIENTE)))
+                .build();
+    }
 
     public Cliente build() {
 
         return Cliente.builder()
+                .usuario(buildUsuario())
                 .nome(nome)
                 .dataNascimento(dataNascimento)
                 .cpf(cpf)
